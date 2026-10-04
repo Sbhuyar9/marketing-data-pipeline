@@ -1,0 +1,16 @@
+name: marketing_analytics
+version: "1.0.0"
+config-version: 2
+profile: marketing_analytics
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+
+models:
+  marketing_analytics:
+    silver:
+      +materialized: view
+      +schema: silver
+    gold:
+      +materialized: table
+      +schema: gold

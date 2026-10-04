@@ -1,0 +1,13 @@
+version: 2
+sources:
+  - name: bronze
+    description: Raw landing tables loaded by Snowpipe (Snowflake) / load_bronze_local.py (DuckDB).
+    schema: bronze
+    tables:
+      - name: ga_events
+        description: Raw Google-Analytics-style events; one JSON payload per row.
+        loaded_at_field: _loaded_at
+      - name: crm_customers
+        description: Raw CRM extract, all columns as strings. May contain stale duplicates.
+      - name: campaign_spend
+        description: Daily campaign spend from ad platforms, as strings.

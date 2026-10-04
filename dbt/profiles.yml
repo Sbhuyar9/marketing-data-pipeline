@@ -1,0 +1,17 @@
+marketing_analytics:
+  target: dev
+  outputs:
+    dev:                     # local: DuckDB stands in for Snowflake
+      type: duckdb
+      path: ../warehouse/marketing.duckdb
+      threads: 4
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'TRANSFORMER') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'TRANSFORM_WH') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'MARKETING') }}"
+      schema: PUBLIC
+      threads: 4

@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: brz_campaigns
+    description: Raw campaigns, typed. One row per ingested record (duplicates preserved).
+    columns:
+      - name: _loaded_at
+        description: Timestamp the record landed in RAW.
+        data_tests: [not_null]
+
+  - name: brz_ad_performance
+    description: Raw daily ad metrics, typed.
+    columns:
+      - name: _loaded_at
+        data_tests: [not_null]
+
+  - name: brz_customers
+    description: Raw CRM contacts, typed.
+    columns:
+      - name: _loaded_at
+        data_tests: [not_null]
+
+  - name: brz_orders
+    description: Raw CRM orders, typed.
+    columns:
+      - name: _loaded_at
+        data_tests: [not_null]

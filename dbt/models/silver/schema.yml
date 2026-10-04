@@ -1,0 +1,40 @@
+version: 2
+models:
+  - name: stg_events
+    description: Cleaned, de-duplicated marketing events (one row per event_id).
+    columns:
+      - name: event_id
+        description: Unique event identifier from the source system.
+        tests: [not_null, unique]
+      - name: event_ts
+        tests: [not_null]
+      - name: event_type
+        tests:
+          - accepted_values: {values: [impression, click, purchase]}
+      - name: channel
+        tests:
+          - accepted_values: {values: [paid_search, email, social, display, affiliate]}
+      - name: customer_id
+        description: Upper-cased CRM customer id; NULL for anonymous traffic.
+        tests:
+          - relationships: {to: ref('stg_customers'), field: customer_id}
+      - name: revenue_usd
+        tests:
+          - between: {min_value: 0, max_value: 1000000}
+  - name: stg_customers
+    description: One row per customer (latest CRM record wins).
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: email
+        tests: [not_null, unique]
+      - name: region
+        tests:
+          - accepted_values: {values: [northeast, south, midwest, west]}
+  - name: stg_campaign_spend
+    columns:
+      - name: campaign_id
+        tests: [not_null]
+      - name: spend_usd
+        tests:
+          - between: {min_value: 0, max_value: 1000000}

@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: gold_campaign_performance
+    description: >
+      Campaign performance mart. Grain: one row per campaign.
+      Revenue is attributed from COMPLETED orders carrying a campaign_id.
+    columns:
+      - name: campaign_id
+        data_tests: [unique, not_null]
+      - name: total_spend
+        description: Sum of daily ad spend.
+        data_tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: ctr
+        description: clicks / impressions.
+        data_tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+      - name: roas
+        description: Attributed revenue / ad spend.
+
+  - name: gold_rfm_segmentation
+    description: >
+      RFM customer segmentation. Grain: one row per customer with at least one COMPLETED order.
+      Scores run 1 (worst) to 5 (best).
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+      - name: r_score
+        data_tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
+      - name: f_score
+        data_tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
+      - name: m_score
+        data_tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
+      - name: segment
+        data_tests:
+          - accepted_values:
+              values: ["CHAMPIONS", "LOYAL", "POTENTIAL_LOYALIST", "AT_RISK", "HIBERNATING", "NEEDS_ATTENTION"]

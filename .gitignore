@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.pytest_cache/
+
+# local data + artifacts
+data/
+reports/
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+logs/
+*.duckdb
+*.duckdb.wal
+.DS_Store
+.idea/
+.vscode/

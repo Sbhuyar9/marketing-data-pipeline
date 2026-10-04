@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Landing schema populated by the Python ingestion layer
+      (S3 + COPY INTO on Snowflake, local NDJSON load on DuckDB).
+    schema: raw
+    tables:
+      - name: campaigns
+        description: Ad campaigns from the marketing platform API.
+      - name: ad_performance
+        description: Daily ad delivery metrics per campaign.
+      - name: customers
+        description: CRM contacts.
+      - name: orders
+        description: CRM orders, optionally attributed to a campaign.

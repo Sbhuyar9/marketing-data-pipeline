@@ -1,0 +1,34 @@
+version: 2
+models:
+  - name: fct_campaign_performance
+    description: Daily campaign performance mart (grain = activity_date x campaign_id).
+    tests:
+      - unique_combination:
+          combination_of_columns: [activity_date, campaign_id]
+    columns:
+      - name: campaign_id
+        tests: [not_null]
+      - name: ctr
+        description: clicks / impressions
+        tests: [{between: {min_value: 0, max_value: 1}}]
+      - name: conversion_rate
+        description: purchases / clicks
+        tests: [{between: {min_value: 0, max_value: 1}}]
+      - name: spend_usd
+        tests: [{between: {min_value: 0, max_value: 10000000}}]
+  - name: dim_customer_rfm
+    description: One row per purchasing customer with RFM scores (1-5) and named segment.
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: r_score
+        tests: [{between: {min_value: 1, max_value: 5}}]
+      - name: f_score
+        tests: [{between: {min_value: 1, max_value: 5}}]
+      - name: m_score
+        tests: [{between: {min_value: 1, max_value: 5}}]
+      - name: segment
+        tests:
+          - not_null
+  - name: mart_segment_summary
+    description: Segment-level rollup for dashboards.

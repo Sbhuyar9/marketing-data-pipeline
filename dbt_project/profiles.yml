@@ -1,0 +1,20 @@
+# Select the warehouse with DBT_TARGET (duckdb | snowflake). Defaults to the local DuckDB demo.
+marketing_pipeline:
+  target: "{{ env_var('DBT_TARGET', 'duckdb') }}"
+  outputs:
+    duckdb:
+      type: duckdb
+      path: "{{ env_var('DUCKDB_PATH', '../data/marketing.duckdb') }}"
+      schema: analytics
+      threads: 4
+
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', '') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD', '') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'TRANSFORMER') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'MARKETING_WH') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'MARKETING') }}"
+      schema: ANALYTICS
+      threads: 4

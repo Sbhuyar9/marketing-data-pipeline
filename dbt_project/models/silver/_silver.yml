@@ -1,0 +1,76 @@
+version: 2
+
+models:
+  - name: slv_campaigns
+    description: Clean, de-duplicated campaigns with standardised channel and status values.
+    columns:
+      - name: campaign_id
+        description: Primary key.
+        data_tests: [unique, not_null]
+      - name: channel
+        data_tests:
+          - accepted_values:
+              values: ["GOOGLE_ADS", "META_ADS", "EMAIL", "LINKEDIN", "TIKTOK"]
+      - name: status
+        data_tests:
+          - accepted_values:
+              values: ["ACTIVE", "PAUSED", "COMPLETED"]
+      - name: budget
+        data_tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+
+  - name: slv_ad_performance
+    description: Valid daily ad metrics, one row per campaign per day.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [campaign_id, ad_date]
+    columns:
+      - name: campaign_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('slv_campaigns')
+              field: campaign_id
+      - name: ad_date
+        data_tests: [not_null]
+      - name: spend
+        data_tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: clicks
+        data_tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+
+  - name: slv_customers
+    description: Clean, de-duplicated CRM contacts with normalised email and country.
+    columns:
+      - name: customer_id
+        description: Primary key.
+        data_tests: [unique, not_null]
+      - name: email
+        data_tests: [unique, not_null]
+
+  - name: slv_orders
+    description: Valid orders (non-null customer, non-negative amount), de-duplicated.
+    columns:
+      - name: order_id
+        description: Primary key.
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('slv_customers')
+              field: customer_id
+      - name: order_date
+        data_tests: [not_null]
+      - name: order_amount
+        data_tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: status
+        data_tests:
+          - accepted_values:
+              values: ["COMPLETED", "REFUNDED", "CANCELLED", "PENDING"]
