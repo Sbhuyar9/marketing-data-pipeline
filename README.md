@@ -104,7 +104,3 @@ cd .. && python -m quality.run_expectations --backend snowflake
 
 - Dependency conflicts on install: use Python 3.10 or 3.11. Great Expectations 0.18 requires `pandas<2.2` and `numpy<2`.
 - `dbt deps` needs internet access to fetch `dbt_utils`.
-
-## License
-
-MIT
